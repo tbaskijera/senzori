@@ -4,17 +4,10 @@ library(forecast)
 podaci <- read.csv("merged_data_rl.csv")
 podaci
 
-# Podjela podataka da se samo ispiše humidity:
-podaci_humidity <- podaci[2]
-podaci_humidity
-
-class(podaci_humidity)
-
 # Dijeljenje podataka na 4 komponente i implementacija vremenske serije:
-tsdata <- ts(podaci_humidity, start = 2023, frequency = 365)
+tsdata <- ts(podaci$Humidity, start = c(2023, 1, 1), frequency = 365)
 ddata <- decompose(tsdata, "multiplicative")
 plot(ddata)
-plot(tsdata)
 
 # Pregled vremenske serije:
 class(tsdata)
@@ -28,8 +21,6 @@ plot(ddata$trend,
      main = "Apsolutna vlaga zraka",
      ylab = "Vlažnost",
      xlab = "Mjeseci")
-plot(ddata$seasonal)
-plot(ddata$random)
 
 plot(tsdata,
      main="Vremenska serija od 2023. do 2024. godine",
@@ -44,16 +35,8 @@ boxplot(tsdata~cycle(tsdata),
         ylab="Relativna vlažnost zraka (%)", 
         main = "Relativna vlažnost zraka od 2023. do 2024. godine")
 
-# Auto arima:
-
-model <- auto.arima(tsdata)
-model
-
-# Graf reziduala:
-plot.ts(model$residuals)
-
 # Predviđanje kretanja relativne vlažnosti zraka slijedećih godinu dana:
-predikcija <- forecast(model, level=c(95), h=1*365)
+predikcija <- forecast(tsdata, h=365)
 plot(predikcija,
      main = "Predviđanje kretanja relativne vlažnosti zraka kroz slijedećih godinu dana",
      ylab = "Vlažnost",
