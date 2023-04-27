@@ -26,8 +26,6 @@ plot(tsdata,
      main="Vremenska serija od 2023. do 2024. godine",
      ylab = "Vlažnost (%)",
      xlab = "Mjeseci")
-abline(reg=lm(tsdata~time(tsdata)), col='red')
-abline(h=60, col="blue")
 
 # Prikaz boxplot dijagrama:
 boxplot(tsdata~cycle(tsdata),
